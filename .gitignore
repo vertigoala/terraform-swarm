@@ -1,0 +1,3 @@
+.terraform/
+swarm.auto.tfvars
+terraform.tfstate*
