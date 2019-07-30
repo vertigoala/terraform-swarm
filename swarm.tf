@@ -6,15 +6,18 @@ provider "aws" {
 
 variable "tag1" {}
 variable "tag2" {}
+variable "keypair" {
+    default = "id_rsa"
+}
 
 # Using lightsail instances
 resource "aws_lightsail_instance" "managers" {
-  count = 3
+  count = 1
   name              = "ala_swarm_manager${count.index}"
   availability_zone = "us-east-1b"
   blueprint_id      = "ubuntu_18_04"
   bundle_id         = "medium_2_0"
-  key_pair_name     = "id_rsa"
+  key_pair_name     = "${var.keypair}"
   tags = {
     role = "manager",
     Area = "${var.tag1}"
@@ -28,7 +31,7 @@ resource "aws_lightsail_instance" "workers" {
   availability_zone = "us-east-1b"
   blueprint_id      = "ubuntu_18_04"
   bundle_id         = "large_2_0"
-  key_pair_name     = "id_rsa"
+  key_pair_name     = "${var.keypair}"
   tags = {
     Area = "${var.tag1}"
     Project = "${var.tag2}"
