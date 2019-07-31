@@ -81,4 +81,32 @@
     debug:
       var: docker_nodes
     when: inventory_hostname == groups['managers'][0]
-    
+
+  #
+  # For the time being we will pin services with shared folders on the same host (we will need labels for that)
+  # Later on we will work with external volumes (like in kubernetes)
+  #
+  - name: Set worker node labels
+    shell: "docker node update --label-add alanode=worker{{ my_idx }} {{ hostvars[item]['ansible_hostname'] }}"
+    #loop: "{{ query('inventory_hostnames', 'managers') }}"
+    loop: "{{ groups['workers'] }}"
+    loop_control:
+      index_var: my_idx
+    when: inventory_hostname == groups['managers'][0]
+
+  - name: Set manager node labels
+    shell: "docker node update --label-add alanode=manager{{ my_idx }} {{ hostvars[item]['ansible_hostname'] }}"
+    #loop: "{{ query('inventory_hostnames', 'managers') }}"
+    loop: "{{ groups['managers'] }}"
+    loop_control:
+      index_var: my_idx
+    when: inventory_hostname == groups['managers'][0]
+
+  # - name: loop test
+  #   debug:
+  #     msg: "{{ hostvars[item]['ansible_hostname'] }}"
+  #   #loop: "{{ query('inventory_hostnames', 'managers') }}"
+  #   loop: "{{ groups['workers'] }}"
+  #   loop_control:
+  #     index_var: my_idx
+  #   when: inventory_hostname == groups['managers'][0]

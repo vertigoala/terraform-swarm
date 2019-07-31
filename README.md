@@ -38,11 +38,27 @@ tafx35xskvnp3b60a832x2mfk     ip-172-26-21-88     Ready     (...)
 tjklviszwdgc0i97vcm5mwwpb     ip-172-26-27-170    Ready     (...)
 ```
 
-## Install Portainer (optional)
+## Install Traefik and Portainer
 
-Portainer is a web UI for docker swarm. Just open the browser at "http://<any_cluster_ip_addr>:9000" (open this port in the node firewall).
+This stack compose deploy Traefik as a front-end LB for all apps. It also installs Portainer for cluster managent UI. DO NOT CHANGE THE STACK NAME "traefik".
+
+Portainer is under a hostname front-end rule ("Host:portainer.example.com"), you can create a hosts file entry for faking it (or change it to any DNS name you want that points to one of the nodes). Just open the browser at "http://portainer.example.com".
 
 ```sh
-curl -L https://downloads.portainer.io/portainer-agent-stack.yml -o portainer-agent-stack.yml
-docker stack deploy --compose-file=portainer-agent-stack.yml portainer
+docker stack deploy --compose-file=traefik-portainer-stack.yml traefik
+```
+
+## Other tips
+
+To install EBS plugin (optional):
+
+```sh
+ansible -a "docker plugin install --grant-all-permissions --alias rexray-ebs rexray/ebs EBS_ACCESSKEY=XXXXXX EBS_SECRETKEY=XXXXXXXXXX EBS_REGION=us-east-1" all -i terraform.py
+```
+
+To disable and remove the ebs plugin from all nodes:
+
+```sh
+ansible -a "docker plugin disable rexray-ebs" all -i terraform.py
+ansible -a "docker plugin rm rexray-ebs" all -i terraform.py
 ```
