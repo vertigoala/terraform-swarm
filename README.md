@@ -50,6 +50,12 @@ docker stack deploy --compose-file=traefik-portainer-stack.yml traefik
 
 ## Other tips
 
+To update OS packages on all nodes:
+
+```sh
+ansible -i terraform.py all -m apt -a "upgrade=yes update_cache=yes cache_valid_time=86400" --become
+```
+
 To install EBS plugin (optional):
 
 ```sh
