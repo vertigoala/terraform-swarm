@@ -28,8 +28,7 @@ ansible-playbook install-docker-ce.yaml -i ./terraform.py
 ## Test remote docker connectivity
 
 ```sh
-export SERVERNAME=<manager_node_ip_address>
-export DOCKER_HOST=ssh://ubuntu@$SERVERNAME
+. ./setenv.sh
 docker node ls
 ID                            HOSTNAME            STATUS    (...)
 iazywsae37y32h8lx7xgehlmo *   ip-172-26-17-25     Ready     (...)
