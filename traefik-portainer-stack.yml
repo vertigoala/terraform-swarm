@@ -13,6 +13,11 @@ services:
       placement:
         constraints:
           - node.role == manager
+      labels:
+        traefik.frontend.rule: "Host:monitor.example.com"
+        traefik.backend: "traefik"
+        traefik.port: "8080"
+        traefik.enable: "true"
     networks:
       - traefik-net
     volumes:
