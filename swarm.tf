@@ -9,10 +9,16 @@ variable "tag2" {}
 variable "keypair" {
     default = "id_rsa"
 }
+variable "qtdman" {
+    default = 1
+}
+variable "qtdwor" {
+    default = 4
+}
 
 # Using lightsail instances
 resource "aws_lightsail_instance" "managers" {
-  count = 1
+  count = "${var.qtdman}"
   name              = "ala_swarm_manager${count.index}"
   availability_zone = "us-east-1b"
   blueprint_id      = "ubuntu_18_04"
@@ -26,7 +32,7 @@ resource "aws_lightsail_instance" "managers" {
 }
 
 resource "aws_lightsail_instance" "workers" {
-  count = 3
+  count = "${var.qtdwor}"
   name              = "ala_swarm_worker${count.index}"
   availability_zone = "us-east-1b"
   blueprint_id      = "ubuntu_18_04"
